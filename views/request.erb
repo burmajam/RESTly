@@ -1,0 +1,41 @@
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<title>
+			Make Request
+		</title>
+	</head>
+	<body id="content">
+		<div id="response_message"></div>
+		<form action='/' method="post">
+			<label for="request[domain]">Domain:</label> <input type="text" name="request[domain]" value="http://localhost:9290/" id="domain_to_hit"><br>
+			<label for="request[url]">Url to hit:</label> <input type="text" name="request[url]" id="url_to_hit"><br>
+			<label for="request[mime]">MIME type:</label> <input type="radio" name="request[mime]" value="json"> JSON <input type="radio" name="request[mime]" value="xml"> XML<br>
+			<label for="request[method]">Method:</label> <input type="radio" name="request[method]" value="get"> GET <input type="radio" name="request[method]" value="post"> POST <input type="radio" name="request[method]" value="put"> PUT <input type="radio" name="request[method]" value="delete"> DELETE<br>
+			<label for="request[body]">Request body:</label><br>
+			<textarea rows="20" cols="40" name="request[body]" id="body_content"></textarea><br/>
+			<br/>
+			<input type="submit" value="HIT"><br/><br/>
+			<label>Response code:</label>
+			<span id="response_code"></span><br/>
+			<label>Response data:</label><br/>
+			<div id="response_data"></div><br/>
+		</form>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+		<script type="text/javascript">
+			$('form').submit(function(){
+				$.ajax({
+					type: "POST",
+					url: "/",
+					data: $(this).serialize(),
+					success: function(data){
+						$('#response_code').html(data.code);
+						$('#response_data').html(JSON.stringify(data.data));
+						$('#response_message').html(data.message);
+					}
+				});
+				return false;
+			})
+		</script>
+	</body>
+</html>
