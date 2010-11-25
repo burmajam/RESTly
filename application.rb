@@ -1,5 +1,5 @@
 module Groundlink
-  module Guardian
+  module Restly
     class Application < Sinatra::Base
       mime_type :json, "application/json"
 
