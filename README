@@ -1,0 +1,15 @@
+= RESTly
+
+Live[http://restly.heroku.com/]
+
+RESTly is small sinatra application (work in progress) for hitting (REST) urls and seeing response (like curl on web).
+
+
+== Installation
+
+  git clone git@github.com:burmajam/RESTly.git
+  bundle install
+
+
+== Starting Server
+  rackup config.ru
