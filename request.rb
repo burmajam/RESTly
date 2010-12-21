@@ -22,7 +22,7 @@ class Request
       self.class.headers 'Content-Type' => 'application/json'
     else
       self.class.format( :xml )
-      self.class.headers 'Content-Type' => 'application/json'
+      self.class.headers 'Content-Type' => 'application/xml'
     end
     data = begin
       if body.blank?
