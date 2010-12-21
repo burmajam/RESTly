@@ -29,18 +29,13 @@ class Request
         mime_type == 'json' ? Crack::JSON.parse(self.body) : Crack::XML.parse(self.body)
       end
     rescue => e
-      message = "Can't parse string to #{mime_type.upcase}: #{body.inspect}.<br/>Error was: #{e.to_s}"
       return self.class.with_error e
     end
     puts "DATA to send: #{data.class}: #{data.inspect}"
     
     begin
-      response = if data.nil?
-        self.class.send method.to_sym, path
-      else 
-        self.class.send method.to_sym, path, :body => data
-      end
-      { :code => response.response.code, :data => response.parsed_response, :message => message, :headers => response.headers.inspect }
+      response = self.class.send method.to_sym, path, :body => data
+      { :code => response.response.code, :data => response.parsed_response, :message => '', :headers => response.headers.inspect }
     rescue => e
       self.class.with_error e
     end

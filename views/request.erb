@@ -12,12 +12,12 @@
 			<form action='/' method="post">
 				<label for="request[domain]">Domain:</label> <input type="text" name="request[domain]" value="http://localhost:9290/" id="domain_to_hit"><br>
 				<label for="request[url]">Url to hit:</label> <input type="text" name="request[url]" id="url_to_hit"><br>
-				<label for="request[mime]">MIME type:</label> <input type="radio" name="request[mime]" value="json"> JSON <input type="radio" name="request[mime]" value="xml"> XML<br>
-				<label for="request[method]">Method:</label> <input type="radio" name="request[method]" value="get"> GET <input type="radio" name="request[method]" value="post"> POST <input type="radio" name="request[method]" value="put"> PUT <input type="radio" name="request[method]" value="delete"> DELETE<br>
+				<label for="request[mime]">MIME type:</label> <input type="radio" name="request[mime]" value="json" CHECKED> JSON <input type="radio" name="request[mime]" value="xml"> XML<br>
+				<label for="request[method]">Method:</label> <input type="radio" name="request[method]" value="get" CHECKED> GET <input type="radio" name="request[method]" value="post"> POST <input type="radio" name="request[method]" value="put"> PUT <input type="radio" name="request[method]" value="delete"> DELETE<br>
 				<label for="request[headers]">Headers:</label><br>
-				<textarea rows="2" cols="40" name="request[headers]" id="body_content"></textarea><br/>
+				<textarea rows="2" cols="80" name="request[headers]" id="request_headers"></textarea><br/>
 				<label for="request[body]">Body:</label><br>
-				<textarea rows="5" cols="40" name="request[body]" id="body_content"></textarea><br/>
+				<textarea rows="5" cols="80" name="request[body]" id="body_content"></textarea><br/>
 				<br/>
 				<input id="hit" type="submit" value="HIT"><img id="spinner" src="ajax-loader.gif" style="display:none;" />
 			</form>
@@ -54,7 +54,16 @@
 					}
 				});
 				return false;
-			})
+			});
+			$("input[name='request[method]']").change(function(){
+				var new_value = $(this).val();
+				if(new_value === 'post' || new_value === 'put'){
+					$('#request_headers').val('Content-Type: application/x-www-form-urlencoded');
+				} else {
+					$('#request_headers').val('');
+				}
+			});
+			
 		</script>
 	</body>
 </html>

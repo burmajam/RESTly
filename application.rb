@@ -4,7 +4,6 @@ module Groundlink
       mime_type :json, "application/json"
       set :public, File.dirname(__FILE__) + '/public'
       
-
       get '/' do
         erb :request
       end
