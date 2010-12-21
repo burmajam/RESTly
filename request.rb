@@ -17,7 +17,13 @@ class Request
   end
   
   def hit
-    mime_type == 'json' ? self.class.format( :json ) : self.class.format( :xml )
+    if mime_type == 'json'
+      self.class.format( :json ) 
+      self.class.headers 'Content-Type' => 'application/json'
+    else
+      self.class.format( :xml )
+      self.class.headers 'Content-Type' => 'application/json'
+    end
     data = begin
       if body.blank?
         nil
