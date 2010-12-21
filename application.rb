@@ -2,6 +2,8 @@ module Groundlink
   module Restly
     class Application < Sinatra::Base
       mime_type :json, "application/json"
+      set :public, File.dirname(__FILE__) + '/public'
+      
 
       get '/' do
         erb :request

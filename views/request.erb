@@ -1,37 +1,56 @@
 <html>
 	<head>
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
-		<title>
-			Make Request
-		</title>
+		<title>RESTly</title>
+		<script type="text/css">
+			body {font-family: Verdana, Arial, Helvetica, sans-serif; }
+		</script>
 	</head>
 	<body id="content">
+		<fieldset>
+	        <legend>Request</legend>
+			<form action='/' method="post">
+				<label for="request[domain]">Domain:</label> <input type="text" name="request[domain]" value="http://localhost:9290/" id="domain_to_hit"><br>
+				<label for="request[url]">Url to hit:</label> <input type="text" name="request[url]" id="url_to_hit"><br>
+				<label for="request[mime]">MIME type:</label> <input type="radio" name="request[mime]" value="json"> JSON <input type="radio" name="request[mime]" value="xml"> XML<br>
+				<label for="request[method]">Method:</label> <input type="radio" name="request[method]" value="get"> GET <input type="radio" name="request[method]" value="post"> POST <input type="radio" name="request[method]" value="put"> PUT <input type="radio" name="request[method]" value="delete"> DELETE<br>
+				<label for="request[headers]">Headers:</label><br>
+				<textarea rows="2" cols="40" name="request[headers]" id="body_content"></textarea><br/>
+				<label for="request[body]">Body:</label><br>
+				<textarea rows="5" cols="40" name="request[body]" id="body_content"></textarea><br/>
+				<br/>
+				<input id="hit" type="submit" value="HIT"><img id="spinner" src="ajax-loader.gif" style="display:none;" />
+			</form>
+	    </fieldset>
 		<div id="response_message"></div>
-		<form action='/' method="post">
-			<label for="request[domain]">Domain:</label> <input type="text" name="request[domain]" value="http://localhost:9290/" id="domain_to_hit"><br>
-			<label for="request[url]">Url to hit:</label> <input type="text" name="request[url]" id="url_to_hit"><br>
-			<label for="request[mime]">MIME type:</label> <input type="radio" name="request[mime]" value="json"> JSON <input type="radio" name="request[mime]" value="xml"> XML<br>
-			<label for="request[method]">Method:</label> <input type="radio" name="request[method]" value="get"> GET <input type="radio" name="request[method]" value="post"> POST <input type="radio" name="request[method]" value="put"> PUT <input type="radio" name="request[method]" value="delete"> DELETE<br>
-			<label for="request[body]">Request body:</label><br>
-			<textarea rows="20" cols="40" name="request[body]" id="body_content"></textarea><br/>
-			<br/>
-			<input type="submit" value="HIT"><br/><br/>
-			<label>Response code:</label>
+		<fieldset id="response_fieldset" style="display:none;">
+	        <legend>Response</legend>
+	        <label>Code:</label>
 			<span id="response_code"></span><br/>
-			<label>Response data:</label><br/>
+			<label>Headers:</label>
+			<span id="response_headers"></span><br/>
+			<label>Data:</label><br/>
 			<div id="response_data"></div><br/>
-		</form>
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+	      </fieldset>
+		<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script> -->
+		<script type="text/javascript" src="jquery.min.js"></script>
 		<script type="text/javascript">
 			$('form').submit(function(){
+				$('#response_fieldset').hide();
+				$('#hit').attr("disabled", true);
+				$('#spinner').show();
 				$.ajax({
 					type: "POST",
 					url: "/",
 					data: $(this).serialize(),
 					success: function(data){
 						$('#response_code').html(data.code);
+						$('#response_headers').html(data.headers);
 						$('#response_data').html(JSON.stringify(data.data));
 						$('#response_message').html(data.message);
+						$('#response_fieldset').show();
+						$('#hit').attr("disabled", false);
+						$('#spinner').hide();
 					}
 				});
 				return false;
