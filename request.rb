@@ -22,19 +22,10 @@ class Request
     self.headers.split('\n').each { |header| self.class.headers.merge! Crack::JSON.parse(header) }
     puts "Request headers: #{self.class.headers.class}: #{self.class.headers.inspect}"
 
-    data = begin
-      if body.blank?
-        nil
-      else
-        mime_type == 'json' ? Crack::JSON.parse(self.body) : Crack::XML.parse(self.body)
-      end
-    rescue => e
-      return self.class.with_error e
-    end
-    puts "DATA to send: #{data.class}: #{data.inspect}"
-    
+    puts "DATA to send: #{self.body.class}: #{self.body.inspect}"
     begin
-      response = self.class.send method.to_sym, path, :body => data
+      options = body.blank? ? {} : { :body => self.body }
+      response = self.class.send method.to_sym, path, options
       { :code => response.response.code, :data => response.parsed_response, :message => '', :headers => response.headers.inspect }
     rescue => e
       self.class.with_error e
